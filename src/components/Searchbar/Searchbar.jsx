@@ -1,10 +1,12 @@
 import { Component } from "react";
 
-import Modal from "./Modal/Modal";
+import Modal from "./Modal";
+import Button from "./Button";
+import Spinner from "./Loader";
 
-import SearchForm from "./Searchform/SearchForm";
-import ImageGallery from "./ImageGallery/ImageGallery";
-import BigImage from "./ImageGallery/BigImage/BigImage";
+import SearchForm from "./Searchform";
+import ImageGallery from "./ImageGallery";
+import BigImage from "./ImageGallery/BigImage";
 
 import { searchImages } from "shared/services/images-api";
 
@@ -55,9 +57,9 @@ class Searchbar extends Component {
         this.setState(({page}) => ({page: page + 1}))
     }
 
-    showImage = ({largeImageURL}) => {
+    showBigImage = ({largeImageURL, tags}) => {
         this.setState({
-            bigImg : {largeImageURL},
+            bigImg : {largeImageURL, tags},
             showModal: true,
         })
     }
@@ -71,16 +73,17 @@ class Searchbar extends Component {
 
     render() {
         
-        const { items, loading, error, showModal, bigImg } = this.state;
-        const {searchImages, loadMore, showImages, closeModal} = this;
+        const { items, loading, error, search, showModal, bigImg } = this.state;
+        const {searchImages, loadMore, showBigImage, closeModal} = this;
         
         return (
             <>
             <SearchForm onSubmit={searchImages}/>
-                <ImageGallery items={items} showImages={showImages}/>
+                <ImageGallery items={items} showImages={showBigImage}/>
+                {!items.length && search && !loading &&<p className={styles.message}>Oops... Images not found</p>}
                 {error && <p>{error}</p>}
-                {loading && <p>...Load images</p>}
-                {Boolean(items.length) && <button onClick={loadMore} className={styles.button}>Load more</button>}
+                {loading && <Spinner/>}
+                {Boolean(items.length) && <Button loadMore={loadMore}>Load more</Button>}
                 {showModal && <Modal close={closeModal}><BigImage {...bigImg}/></Modal>}
             </>
         )

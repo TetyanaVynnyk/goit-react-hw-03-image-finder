@@ -1,13 +1,22 @@
+import PropTypes from 'prop-types';
+
 const BigImage = ({ largeImageURL, tags }) => {
   return (
-    <div>
       <img
         src={largeImageURL}
         alt={tags}
         // className={styles.image}
       />
-    </div>
   );
 };
 
 export default BigImage;
+
+BigImage.propTypes = {
+  items: PropTypes.arrayOf(
+    PropTypes.shape({
+      largeImageURL: PropTypes.string.isRequired,
+      tags: PropTypes.string.isRequired,
+    })
+  ),
+};
