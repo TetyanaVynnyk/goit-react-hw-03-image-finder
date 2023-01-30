@@ -5,7 +5,6 @@ const BigImage = ({ largeImageURL, tags }) => {
       <img
         src={largeImageURL}
         alt={tags}
-        // className={styles.image}
       />
   );
 };
